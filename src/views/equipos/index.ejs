@@ -1,0 +1,17 @@
+<h1 class="mb-4">Equipos</h1>
+<a href="/equipos/create" class="btn btn-success mb-3">+ Nuevo Equipo</a>
+
+<div class="row">
+    <% equipos.forEach(equipo => { %>
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><%= equipo.nombre_equipo %></h5>
+                    <p class="card-text"><%= equipo.descripcion %></p>
+                    <a href="/equipos/<%= equipo.id %>" class="btn btn-primary btn-sm">Ver Detalles</a>
+                    <a href="/equipos/delete/<%= equipo.id %>" class="btn btn-danger btn-sm">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</div>

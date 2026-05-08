@@ -1,0 +1,206 @@
+.kanban-column {
+    min-height: 500px;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.kanban-column:hover {
+    transform: translateY(-2px);
+}
+
+.kanban-column[data-estado="Por realizar"] {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    color: white;
+}
+
+.kanban-column[data-estado="En proceso"] {
+    background: linear-gradient(135deg, #ffeaa7 0%, #d63031 100%);
+    color: #2d3436;
+}
+
+.kanban-column[data-estado="Realizado"] {
+    background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+    color: white;
+}
+
+.task-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    cursor: move;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.task-card.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg);
+}
+
+.priority-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+}
+
+.priority-Baja {
+    background-color: #00b894;
+    color: white;
+}
+
+.priority-Media {
+    background-color: #fdcb6e;
+    color: #2d3436;
+}
+
+.priority-Alta {
+    background-color: #e17055;
+    color: white;
+}
+
+.priority-Urgente {
+    background-color: #d63031;
+    color: white;
+}
+
+.btn-custom {
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+    transform: scale(1.05);
+}
+
+.hero-section {
+    text-align: center;
+    padding: 3rem 0;
+    color: white;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.stats-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    color: white;
+    backdrop-filter: blur(10px);
+}
+
+.stats-card h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stats-card p {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Login page styles */
+.login-page {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.login-panel {
+    width: 100%;
+    max-width: 480px;
+}
+
+.login-brand {
+    color: #2b2d42;
+}
+
+.login-logo {
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 1rem;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #5a60f8 0%, #6d5dfc 100%);
+    color: #ffffff;
+    font-size: 2rem;
+    box-shadow: 0 18px 40px rgba(72, 62, 207, 0.18);
+}
+
+.login-card {
+    border-radius: 28px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(125, 136, 255, 0.12);
+    box-shadow: 0 22px 70px rgba(77, 77, 143, 0.12);
+}
+
+.login-card .card-body {
+    padding: 2rem;
+}
+
+.login-card .form-label {
+    font-weight: 600;
+    color: #41436a;
+}
+
+.login-card .form-control {
+    border-radius: 14px;
+    padding: 1rem 1rem;
+    border: 1px solid #e2e4f8;
+    background: #f8f9ff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-card .form-control:focus {
+    border-color: #5a60f8;
+    box-shadow: 0 0 0 0.15rem rgba(90, 96, 248, 0.18);
+}
+
+.btn-login {
+    border-radius: 14px;
+    padding: 0.95rem 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.login-card .card-footer {
+    background: transparent;
+}
+
+.login-card a {
+    text-decoration: none;
+}
+
+.login-card a:hover {
+    text-decoration: underline;
+}
