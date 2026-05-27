@@ -1,0 +1,116 @@
+<%- include('../partials/navbar-user', { currentPage: 'dashboard' }) %>
+
+<div class="main pt-3">
+  <div class="shell">
+
+    <%- include('../partials/flash-messages') %>
+
+    <div class="hero mb-4">
+      <h1><i class="bi bi-hand-wave"></i> Hola, <%= currentUser.name.split(' ')[0] %></h1>
+      <p>Tienes <strong><%= stats.porRealizar %> tareas pendientes</strong> hoy · Equipo: <%= boardName %></p>
+      <a href="/user/board" class="btn btn-light btn-hero">
+        <i class="bi bi-kanban me-1"></i>Ver Mi Tablero
+      </a>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="scard">
+          <i class="bi bi-check-circle-fill fs-2 mb-2 d-block"></i>
+          <h2><%= stats.realizado %></h2>
+          <p>Completadas</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="scard">
+          <i class="bi bi-arrow-repeat fs-2 mb-2 d-block"></i>
+          <h2><%= stats.enProceso %></h2>
+          <p>En Proceso</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="scard">
+          <i class="bi bi-circle fs-2 mb-2 d-block"></i>
+          <h2><%= stats.porRealizar %></h2>
+          <p>Por Realizar</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="scard">
+          <i class="bi bi-list-task fs-2 mb-2 d-block"></i>
+          <h2><%= stats.total %></h2>
+          <p>Total Tareas</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h2 style="font-size:1rem;font-weight:700;color:var(--txt);">
+        <i class="bi bi-grid-3x3-gap me-2" style="color:var(--u);"></i>Resumen del Tablero
+      </h2>
+      <a href="/user/board" class="btn-u"><i class="bi bi-arrows-fullscreen"></i>Ver completo</a>
+    </div>
+
+    <div class="row g-3">
+      <!-- Por realizar -->
+      <div class="col-md-4">
+        <div class="kcol" data-s="Por realizar">
+          <div class="col-lbl">
+            <i class="bi bi-circle"></i>Por realizar
+            <span class="ms-1"><%= previewTasks.porRealizar.length %></span>
+          </div>
+          <% previewTasks.porRealizar.forEach(task => { %>
+            <div class="tcard">
+              <h5><%= task.title %></h5>
+              <p><%= task.description %></p>
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- En proceso -->
+      <div class="col-md-4">
+        <div class="kcol" data-s="En proceso">
+          <div class="col-lbl">
+            <i class="bi bi-arrow-repeat"></i>En proceso
+            <span class="ms-1"><%= previewTasks.enProceso.length %></span>
+          </div>
+          <% previewTasks.enProceso.forEach(task => { %>
+            <div class="tcard">
+              <h5><%= task.title %></h5>
+              <p><%= task.description %></p>
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Realizado -->
+      <div class="col-md-4">
+        <div class="kcol" data-s="Realizado">
+          <div class="col-lbl">
+            <i class="bi bi-check-circle-fill"></i>Realizado
+            <span class="ms-1"><%= previewTasks.realizado.length %></span>
+          </div>
+          <% previewTasks.realizado.forEach(task => { %>
+            <div class="tcard">
+              <h5><%= task.title %></h5>
+              <p><%= task.description %></p>
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

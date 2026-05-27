@@ -1,0 +1,10 @@
+<% if (typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+  <div style="background:#dcfce7;border:1px solid #86efac;border-radius:10px;padding:.65rem 1rem;margin-bottom:1.25rem;font-size:.85rem;color:#166534;display:flex;align-items:center;gap:.5rem;">
+    <i class="bi bi-check-circle-fill"></i> <%= success_msg %>
+  </div>
+<% } %>
+<% if (typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+  <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:.65rem 1rem;margin-bottom:1.25rem;font-size:.85rem;color:#991b1b;display:flex;align-items:center;gap:.5rem;">
+    <i class="bi bi-exclamation-circle-fill"></i> <%= error_msg %>
+  </div>
+<% } %>

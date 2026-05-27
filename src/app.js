@@ -1,69 +1,56 @@
-const express = require('express');
-const session = require('express-session');
-const passport = require('./config/passport');
-const ejs = require('ejs');
-const path = require('path');
+const express        = require('express');
+const path           = require('path');
+const session        = require('express-session');
+const flash          = require('connect-flash');
+const methodOverride = require('method-override');
+const ejsLayouts     = require('express-ejs-layouts');
+
+const authRoutes  = require('./routes/authRoutes');
+const userRoutes  = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
-// Configuración de vistas
+/* ── MOTOR DE VISTAS ── */
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(ejsLayouts);
+app.set('layout', 'layouts/main');
 
-// Middlewares
+/* ── MIDDLEWARES ── */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Sesiones
+/* ── SESIÓN ── */
 app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
+  secret: process.env.SESSION_SECRET || 'kandex_secret_2026',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 
-// Passport
-app.use(passport.initialize());
-app.use(passport.session());
+/* ── FLASH ── */
+app.use(flash());
 
-// Rutas
-const authRoutes = require('./routes/authRoutes');
-const dashboardRoutes = require('./routes/dashboardRoutes');
-const tareaRoutes = require('./routes/tareaRoutes');
-const equipoRoutes = require('./routes/equipoRoutes');
-const reporteRoutes = require('./routes/reporteRoutes');
-// Agregar más rutas aquí
-
-app.use('/auth', authRoutes);
-app.use('/dashboard', dashboardRoutes);
-app.use('/tareas', tareaRoutes);
-app.use('/equipos', equipoRoutes);
-app.use('/reportes', reporteRoutes);
-// Agregar más rutas
-
-// Ruta raíz
-app.get('/', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.redirect('/dashboard');
-    } else {
-        res.redirect('/auth/login');
-    }
+/* ── VARIABLES GLOBALES PARA LAS VISTAS ── */
+app.use((req, res, next) => {
+  res.locals.currentUser  = req.session.user || null;
+  res.locals.success_msg  = req.flash('success_msg');
+  res.locals.error_msg    = req.flash('error_msg');
+  res.locals.error        = req.flash('error');
+  next();
 });
 
-// Ruta temporal para ver dashboard sin login
-app.get('/demo', (req, res) => {
-    const tareasEjemplo = [
-        { id: 1, titulo: 'Tarea de ejemplo 1', descripcion: 'Descripción 1', estado: 'Por realizar', prioridad: 'Media' },
-        { id: 2, titulo: 'Tarea de ejemplo 2', descripcion: 'Descripción 2', estado: 'En proceso', prioridad: 'Alta' },
-        { id: 3, titulo: 'Tarea de ejemplo 3', descripcion: 'Descripción 3', estado: 'Realizado', prioridad: 'Baja' }
-    ];
-    res.render('dashboard', { tareas: tareasEjemplo, user: { nombre_usuario: 'Demo' } });
-});
+/* ── RUTAS ── */
+app.use('/',       authRoutes);
+app.use('/user',   userRoutes);
+app.use('/admin',  adminRoutes);
 
-// Manejo de errores
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+/* ── 404 ── */
+app.use((req, res) => {
+  res.status(404).render('404', { layout: 'layouts/auth', title: 'Página no encontrada' });
 });
 
 module.exports = app;

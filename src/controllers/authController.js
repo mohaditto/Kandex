@@ -1,33 +1,75 @@
-const Usuario = require('../models/usuarioModel');
-const passport = require('../config/passport');
+const userModel = require('../models/userModel');
 
+// GET /login
 exports.getLogin = (req, res) => {
-    res.render('auth/login');
+  res.render('auth/login', {
+    layout: 'layouts/auth',
+    title: 'Iniciar Sesión — Kandex'
+  });
 };
 
-exports.postLogin = passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/auth/login',
-    failureFlash: true
-});
+// POST /login
+exports.postLogin = (req, res) => {
+  const { email, password } = req.body;
 
+  if (!email || !password) {
+    req.flash('error_msg', 'Por favor completa todos los campos.');
+    return res.redirect('/login');
+  }
+
+  const user = userModel.findByEmail(email.trim().toLowerCase());
+
+  if (!user || !userModel.validatePassword(password, user.password)) {
+    req.flash('error_msg', 'Correo o contraseña incorrectos.');
+    return res.redirect('/login');
+  }
+
+  req.session.user = {
+    id:       user.id,
+    name:     user.name,
+    email:    user.email,
+    role:     user.role,
+    color:    user.color,
+    initials: userModel.getInitials(user.name)
+  };
+
+  if (user.role === 'admin') {
+    return res.redirect('/admin/dashboard');
+  }
+  res.redirect('/user/dashboard');
+};
+
+// GET /register
 exports.getRegister = (req, res) => {
-    res.render('auth/register');
+  res.render('auth/register', {
+    layout: 'layouts/auth',
+    title: 'Crear Cuenta — Kandex'
+  });
 };
 
-exports.postRegister = async (req, res) => {
-    try {
-        const { nombre_usuario, email, password, rol } = req.body;
-        await Usuario.create({ nombre_usuario, email, password, rol: rol || 'Miembro' });
-        res.redirect('/auth/login');
-    } catch (err) {
-        console.error(err);
-        res.redirect('/auth/register');
-    }
+// POST /register
+exports.postRegister = (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    req.flash('error_msg', 'Por favor completa todos los campos.');
+    return res.redirect('/register');
+  }
+
+  const existing = userModel.findByEmail(email.trim().toLowerCase());
+  if (existing) {
+    req.flash('error_msg', 'Ya existe una cuenta con ese correo.');
+    return res.redirect('/register');
+  }
+
+  // En producción: crear usuario en BD
+  req.flash('success_msg', '¡Cuenta creada! Ya puedes iniciar sesión.');
+  res.redirect('/login');
 };
 
+// GET /logout
 exports.logout = (req, res) => {
-    req.logout(() => {
-        res.redirect('/auth/login');
-    });
+  req.session.destroy(() => {
+    res.redirect('/login');
+  });
 };

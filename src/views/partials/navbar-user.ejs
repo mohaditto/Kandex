@@ -1,0 +1,23 @@
+<nav class="kbar" id="nav-user">
+  <a href="/user/dashboard" class="brand"><i class="bi bi-kanban-fill"></i>Kandex</a>
+  <div class="nav-links">
+    <a href="/user/dashboard" class="<%= currentPage === 'dashboard' ? 'nav-active' : '' %>">
+      <i class="bi bi-house-door"></i>Inicio
+    </a>
+    <a href="/user/board" class="<%= currentPage === 'board' ? 'nav-active' : '' %>">
+      <i class="bi bi-kanban"></i>Mi Tablero
+    </a>
+    <a href="/user/profile" class="<%= currentPage === 'profile' ? 'nav-active' : '' %>">
+      <i class="bi bi-person-gear"></i>Mi Perfil
+    </a>
+  </div>
+  <div class="nav-right">
+    <span class="role-chip chip-user"><i class="bi bi-person-fill me-1"></i>Usuario</span>
+    <a href="/user/profile" class="user-btn">
+      <i class="bi bi-person-circle"></i><%= currentUser.name %>
+    </a>
+    <a href="/logout" class="logout-btn">
+      <i class="bi bi-box-arrow-right"></i>Salir
+    </a>
+  </div>
+</nav>

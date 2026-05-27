@@ -1,0 +1,167 @@
+<%- include('../partials/navbar-admin', { currentPage: 'dashboard' }) %>
+
+<div class="main pt-3">
+  <div class="shell admin-shell">
+
+    <div class="sec-head">
+      <h1><i class="bi bi-speedometer2 me-2"></i>Panel de Administración</h1>
+      <div class="d-flex gap-2">
+        <a href="/admin/boards" class="btn btn-outline-secondary btn-hero" style="font-size:.8rem;color:var(--muted);">
+          <i class="bi bi-grid-fill me-1"></i>Tableros
+        </a>
+        <a href="/admin/users" class="btn-adm">
+          <i class="bi bi-people-fill"></i>Gestionar Usuarios
+        </a>
+      </div>
+    </div>
+
+    <%- include('../partials/flash-messages') %>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="ascard">
+          <div class="ico" style="background:#fef3c7;">
+            <i class="bi bi-people-fill" style="color:#d97706;"></i>
+          </div>
+          <h2><%= stats.total_users %></h2>
+          <p>Usuarios</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="ascard">
+          <div class="ico" style="background:#dbeafe;">
+            <i class="bi bi-kanban-fill" style="color:#2563eb;"></i>
+          </div>
+          <h2><%= stats.total_boards %></h2>
+          <p>Tableros</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="ascard">
+          <div class="ico" style="background:#dcfce7;">
+            <i class="bi bi-check2-all" style="color:#16a34a;"></i>
+          </div>
+          <h2><%= stats.completed_tasks %></h2>
+          <p>Completadas</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="ascard">
+          <div class="ico" style="background:#fce7f3;">
+            <i class="bi bi-exclamation-triangle-fill" style="color:#db2777;"></i>
+          </div>
+          <h2><%= stats.urgent_tasks %></h2>
+          <p>Urgentes</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <!-- Usuarios recientes -->
+      <div class="col-md-6">
+        <div class="atable">
+          <div class="atable-head">
+            <h6><i class="bi bi-people-fill"></i>Usuarios Recientes</h6>
+            <a href="/admin/users" class="btn-adm" style="font-size:.75rem;padding:.3rem .75rem;">Ver todos</a>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Usuario</th><th>Rol</th><th>Estado</th></tr>
+            </thead>
+            <tbody>
+              <% recentUsers.forEach(u => { %>
+                <% const initials = u.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() %>
+                <tr>
+                  <td>
+                    <span class="uav" style="background:<%= u.color || '#6c757d' %>;"><%= initials %></span>
+                    <strong><%= u.name %></strong>
+                  </td>
+                  <td>
+                    <% if (u.role === 'admin') { %>
+                      <span class="ptag adm"><i class="bi bi-shield me-1"></i>Admin</span>
+                    <% } else { %>
+                      <span class="ptag"><i class="bi bi-person me-1"></i>Usuario</span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <% if (u.status === 'active') { %>
+                      <span class="sbadge sActive">Activo</span>
+                    <% } else if (u.status === 'inactive') { %>
+                      <span class="sbadge sInactive">Inactivo</span>
+                    <% } else { %>
+                      <span class="sbadge sPending">Pendiente</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Actividad reciente -->
+      <div class="col-md-6">
+        <div class="atable">
+          <div class="atable-head">
+            <h6><i class="bi bi-activity"></i>Actividad Reciente</h6>
+          </div>
+          <div style="padding:.5rem 1rem;">
+            <% activity.forEach(act => { %>
+              <div class="act-item">
+                <div class="act-dot" style="background:<%= act.bg_color %>;">
+                  <i class="bi <%= act.icon %>" style="color:<%= act.icon_color %>;"></i>
+                </div>
+                <div>
+                  <p><%- act.text %></p>
+                  <small><i class="bi bi-clock me-1"></i><%= act.time %></small>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado de tableros -->
+      <div class="col-12">
+        <div class="atable">
+          <div class="atable-head">
+            <h6><i class="bi bi-grid-fill"></i>Estado de Tableros</h6>
+            <a href="/admin/boards" class="btn-adm" style="font-size:.75rem;padding:.3rem .75rem;">Ver todos</a>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Tablero</th><th>Equipo</th><th>Progreso</th><th>Estado</th></tr>
+            </thead>
+            <tbody>
+              <% boards.forEach(b => { %>
+                <tr>
+                  <td><strong><%= b.name %></strong></td>
+                  <td><%= b.members %> miembros</td>
+                  <td style="min-width:140px;">
+                    <span style="font-size:.74rem;font-weight:600;"><%= b.progress %>%</span>
+                    <div class="mbar">
+                      <div class="mbar-fill" style="width:<%= b.progress %>%;"></div>
+                    </div>
+                  </td>
+                  <td>
+                    <% if (b.status === 'active') { %>
+                      <span class="sbadge bsActive">Activo</span>
+                    <% } else { %>
+                      <span class="sbadge bsArchived">Archivado</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer style="background:rgba(0,0,0,.3);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.45);font-size:.82rem;padding:.8rem;text-align:center;">
+  <i class="bi bi-c-circle"></i> 2026 Kandex Admin · Node.js · Express · Bootstrap 5
+</footer>

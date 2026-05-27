@@ -1,0 +1,107 @@
+<%- include('../partials/navbar-user', { currentPage: 'board' }) %>
+
+<div class="main pt-3">
+  <div class="shell">
+
+    <%- include('../partials/flash-messages') %>
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h1 style="font-size:1.3rem;font-weight:800;letter-spacing:-.03em;">
+          <i class="bi bi-kanban-fill me-2" style="color:var(--u);"></i>Mi Tablero Kanban
+        </h1>
+        <p class="text-muted mb-0" style="font-size:.8rem;">
+          <%= boardName %> · <%= stats.total %> tareas activas
+        </p>
+      </div>
+      <button class="btn-u"><i class="bi bi-plus"></i>Nueva Tarea</button>
+    </div>
+
+    <div class="row g-3">
+
+      <!-- COLUMNA: POR REALIZAR -->
+      <div class="col-md-4">
+        <div class="kcol" data-s="Por realizar">
+          <div class="col-lbl">
+            <i class="bi bi-circle"></i>Por realizar
+            <span class="ms-1"><%= kanban.porRealizar.length %></span>
+          </div>
+          <% kanban.porRealizar.forEach(task => { %>
+            <div class="tcard" draggable="true" data-id="<%= task.id %>">
+              <h5><%= task.title %></h5>
+              <p><%= task.description %></p>
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <div class="d-flex gap-1">
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- COLUMNA: EN PROCESO -->
+      <div class="col-md-4">
+        <div class="kcol" data-s="En proceso">
+          <div class="col-lbl">
+            <i class="bi bi-arrow-repeat"></i>En proceso
+            <span class="ms-1"><%= kanban.enProceso.length %></span>
+          </div>
+          <% kanban.enProceso.forEach(task => { %>
+            <div class="tcard" draggable="true" data-id="<%= task.id %>">
+              <h5><%= task.title %></h5>
+              <p><%= task.description %></p>
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <div class="d-flex gap-1">
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- COLUMNA: REALIZADO -->
+      <div class="col-md-4">
+        <div class="kcol" data-s="Realizado">
+          <div class="col-lbl">
+            <i class="bi bi-check-circle-fill"></i>Realizado
+            <span class="ms-1"><%= kanban.realizado.length %></span>
+          </div>
+          <% kanban.realizado.forEach(task => { %>
+            <div class="tcard" draggable="true" data-id="<%= task.id %>">
+              <h5><%= task.title %></h5>
+              <p><%= task.description %></p>
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <div class="d-flex gap-1">
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
