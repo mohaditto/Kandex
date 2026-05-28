@@ -1,8 +1,6 @@
-/* ── KANDEX KANBAN JS ── */
-
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ── DRAG & DROP ── */
+  //* drag and drop, i love it
   const cards   = document.querySelectorAll('.tcard[draggable]');
   const columns = document.querySelectorAll('.kcol');
 
@@ -41,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       col.classList.remove('drag-over');
       updateColumnCounts();
-      // Aquí se puede hacer fetch a /api/tasks/:id para persistir el cambio
     });
   });
 

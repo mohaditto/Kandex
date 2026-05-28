@@ -1,7 +1,7 @@
 const { DEMO_USERS } = require('../config/demoData');
 const bcrypt = require('bcryptjs');
 
-// En producción, reemplazar con consultas a MySQL via db.js
+// El reemplazo de consultas a MySQL
 
 function findByEmail(email) {
   return DEMO_USERS.find(u => u.email === email.toLowerCase()) || null;

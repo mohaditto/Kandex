@@ -19,7 +19,7 @@ exports.getDashboard = (req, res) => {
     user,
     stats,
     previewTasks,
-    boardName: board ? board.name : 'Frontend Squad'
+    boardName: board ? board.name : 'Desarrollo Kandex'
   });
 };
 
@@ -35,7 +35,7 @@ exports.getBoard = (req, res) => {
     user,
     kanban,
     stats,
-    boardName: board ? board.name : 'Frontend Squad'
+    boardName: board ? board.name : 'Desarrollo Kandex'
   });
 };
 

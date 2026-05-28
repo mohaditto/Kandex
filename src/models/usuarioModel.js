@@ -16,7 +16,7 @@ class Usuario {
         return rows[0];
     }
 
-    // Otros métodos si es necesario
+    // Otros metodos si es necesario
 }
 
 module.exports = Usuario;

@@ -19,11 +19,10 @@
 
     <div class="row g-3">
 
-      <!-- COLUMNA: POR REALIZAR -->
+      <!-- Por Realizars -->
       <div class="col-md-4">
         <div class="kcol" data-s="Por realizar">
-          <div class="col-lbl">
-            <i class="bi bi-circle"></i>Por realizar
+          <div class="col-lbl">Por realizar
             <span class="ms-1"><%= kanban.porRealizar.length %></span>
           </div>
           <% kanban.porRealizar.forEach(task => { %>
@@ -46,11 +45,10 @@
         </div>
       </div>
 
-      <!-- COLUMNA: EN PROCESO -->
+      <!-- En Procesop -->
       <div class="col-md-4">
         <div class="kcol" data-s="En proceso">
-          <div class="col-lbl">
-            <i class="bi bi-arrow-repeat"></i>En proceso
+          <div class="col-lbl">En proceso
             <span class="ms-1"><%= kanban.enProceso.length %></span>
           </div>
           <% kanban.enProceso.forEach(task => { %>
@@ -73,11 +71,10 @@
         </div>
       </div>
 
-      <!-- COLUMNA: REALIZADO -->
+      <!-- Realizaroo -->
       <div class="col-md-4">
         <div class="kcol" data-s="Realizado">
-          <div class="col-lbl">
-            <i class="bi bi-check-circle-fill"></i>Realizado
+          <div class="col-lbl">Realizado
             <span class="ms-1"><%= kanban.realizado.length %></span>
           </div>
           <% kanban.realizado.forEach(task => { %>
@@ -99,7 +96,6 @@
           <% }) %>
         </div>
       </div>
-
     </div>
   </div>
 </div>
