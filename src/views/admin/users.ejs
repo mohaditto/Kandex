@@ -13,7 +13,7 @@
     <!-- Filtros -->
     <form action="/admin/users" method="GET">
       <div class="frow">
-        <input type="text" name="search" class="fsearch" placeholder="🔍 Buscar usuario..."
+        <input type="text" name="search" class="fsearch" placeholder="Buscar usuario..."
               value="<%= filters.search %>" style="min-width:220px;">
         <select name="role" class="fsel" onchange="this.form.submit()">
           <option value="all"   <%= filters.role === 'all'   ? 'selected' : '' %>>Todos los roles</option>
@@ -111,5 +111,5 @@
 </div>
 
 <footer style="background:rgba(0,0,0,.3);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.45);font-size:.82rem;padding:.8rem;text-align:center;">
-  <i class="bi bi-c-circle"></i> 2026 Kandex Admin
+  <i class="bi bi-c-circle"></i> 2026 Kandex Administración
 </footer>

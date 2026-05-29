@@ -9,7 +9,13 @@ function findById(id) {
 }
 
 function getByOwnerId(userId) {
-  return DEMO_BOARDS.filter(b => b.owner_id === parseInt(userId));
+  const id = parseInt(userId);
+  return DEMO_BOARDS.filter(b => {
+    if (Array.isArray(b.owner_id)) {
+      return b.owner_id.includes(id);
+    }
+    return b.owner_id === id;
+  });
 }
 
 function getStats() {

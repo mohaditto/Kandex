@@ -79,9 +79,9 @@ const DEMO_BOARDS = [
   {
     id: 2,
     name: 'Ecuipo Maravilla Fluorescente',
-    owner_id: 2,
-    owner_name: 'Tahis Canello',
-    owner_initials: 'TC',
+    owner_id: [2, 3, 6],
+    owner_name: 'Tahis Canello / Daisy Toledo / Renata Amigo',
+    owner_initials: 'TC/DT/RA',
     owner_color: '#6366f1',
     members: 3,
     tasks: 12,
