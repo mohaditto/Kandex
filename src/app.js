@@ -9,21 +9,23 @@ const authRoutes  = require('./routes/authRoutes');
 const userRoutes  = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
+const tareaRoutes = require('./routes/tareaRoutes');
+
 const app = express();
 
-/* ── MOTOR DE VISTAS ── */
+/* motor de vistas */
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(ejsLayouts);
 app.set('layout', 'layouts/main');
 
-/* ── MIDDLEWARES ── */
+/* middlewares  */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* ── SESIÓN ── */
+/* sesion */
 app.use(session({
   secret: process.env.SESSION_SECRET || 'kandex_secret_2026',
   resave: false,
@@ -31,10 +33,10 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 
-/* ── FLASH ── */
+/* flash */
 app.use(flash());
 
-/* ── VARIABLES GLOBALES PARA LAS VISTAS ── */
+/* variables globales para las vistas */
 app.use((req, res, next) => {
   res.locals.currentUser  = req.session.user || null;
   res.locals.success_msg  = req.flash('success_msg');
@@ -43,12 +45,15 @@ app.use((req, res, next) => {
   next();
 });
 
-/* ── RUTAS ── */
+/* rutas */
 app.use('/',       authRoutes);
 app.use('/user',   userRoutes);
 app.use('/admin',  adminRoutes);
 
-/* ── 404 ── */
+/* tareas */
+app.use('/tareas', tareaRoutes);
+
+/* 404 */
 app.use((req, res) => {
   res.status(404).render('404', { layout: 'layouts/auth', title: 'Página no encontrada' });
 });

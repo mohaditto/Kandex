@@ -1,8 +1,8 @@
-const Tarea = require('../models/tareaModel');
+const Task = require('../models/taskModel');
 
 exports.index = async (req, res) => {
     try {
-        const tareas = await Tarea.findByUser(req.user.id);
+        const tareas = await Task.findByUser(req.user.id);
         const completadas = tareas.filter(t => t.estado === 'Realizado');
         
         // Calcular tiempos
@@ -33,7 +33,7 @@ exports.index = async (req, res) => {
 exports.filtrarPorFecha = async (req, res) => {
     try {
         const { fecha_inicio, fecha_fin } = req.query;
-        const tareas = await Tarea.findByUser(req.user.id);
+        const tareas = await Task.findByUser(req.user.id);
         
         const filtradas = tareas.filter(t => {
             if (t.estado === 'Realizado') {

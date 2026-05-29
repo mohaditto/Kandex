@@ -1,6 +1,6 @@
 const userModel = require('../models/userModel');
 
-// GET /login
+// login
 exports.getLogin = (req, res) => {
   res.render('auth/login', {
     layout: 'layouts/auth',
@@ -8,7 +8,6 @@ exports.getLogin = (req, res) => {
   });
 };
 
-// POST /login
 exports.postLogin = (req, res) => {
   const { email, password } = req.body;
 
@@ -39,7 +38,7 @@ exports.postLogin = (req, res) => {
   res.redirect('/user/dashboard');
 };
 
-// GET /register
+// register
 exports.getRegister = (req, res) => {
   res.render('auth/register', {
     layout: 'layouts/auth',
@@ -47,7 +46,6 @@ exports.getRegister = (req, res) => {
   });
 };
 
-// POST /register
 exports.postRegister = (req, res) => {
   const { name, email, password } = req.body;
 
@@ -62,12 +60,12 @@ exports.postRegister = (req, res) => {
     return res.redirect('/register');
   }
 
-  // En producción: crear usuario en BD
+  // pa despues, crear usuario en bd... db, lo mismo
   req.flash('success_msg', '¡Cuenta creada! Ya puedes iniciar sesión.');
   res.redirect('/login');
 };
 
-// GET /logout
+// logout
 exports.logout = (req, res) => {
   req.session.destroy(() => {
     res.redirect('/login');

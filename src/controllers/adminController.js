@@ -3,7 +3,7 @@ const boardModel = require('../models/boardModel');
 const taskModel  = require('../models/taskModel');
 const { DEMO_STATS, DEMO_ACTIVITY } = require('../config/demoData');
 
-// GET /admin/dashboard
+// admin dashboard
 exports.getDashboard = (req, res) => {
   const user         = req.session.user;
   const recentUsers  = userModel.getAll().slice(0, 4);
@@ -19,7 +19,7 @@ exports.getDashboard = (req, res) => {
   });
 };
 
-// GET /admin/users
+// admin users
 exports.getUsers = (req, res) => {
   const user    = req.session.user;
   const { search, role, status } = req.query;
@@ -43,7 +43,7 @@ exports.getUsers = (req, res) => {
   });
 };
 
-// GET /admin/boards
+// admin boards
 exports.getBoards = (req, res) => {
   const user   = req.session.user;
   const { search, status } = req.query;
@@ -65,7 +65,7 @@ exports.getBoards = (req, res) => {
   });
 };
 
-// GET /admin/profile
+// admin profile
 exports.getProfile = (req, res) => {
   const user = req.session.user;
   res.render('admin/profile', {
@@ -74,7 +74,6 @@ exports.getProfile = (req, res) => {
   });
 };
 
-// POST /admin/profile
 exports.postProfile = (req, res) => {
   const { name, email, password, password2 } = req.body;
   const { getInitials } = require('../models/userModel');

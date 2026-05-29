@@ -2,7 +2,7 @@ const taskModel  = require('../models/taskModel');
 const boardModel = require('../models/boardModel');
 const userModel  = require('../models/userModel');
 
-// GET /user/dashboard
+// user dashboard
 exports.getDashboard = (req, res) => {
   const user      = req.session.user;
   const board     = boardModel.getByOwnerId(user.id)[0] || boardModel.findById(1);
@@ -23,7 +23,7 @@ exports.getDashboard = (req, res) => {
   });
 };
 
-// GET /user/board
+// user board
 exports.getBoard = (req, res) => {
   const user   = req.session.user;
   const board  = boardModel.getByOwnerId(user.id)[0] || boardModel.findById(1);
@@ -39,7 +39,7 @@ exports.getBoard = (req, res) => {
   });
 };
 
-// GET /user/profile
+// user profile
 exports.getProfile = (req, res) => {
   const user = req.session.user;
   res.render('user/profile', {
@@ -48,7 +48,6 @@ exports.getProfile = (req, res) => {
   });
 };
 
-// POST /user/profile
 exports.postProfile = (req, res) => {
   const { name, email, password, password2 } = req.body;
   const user = req.session.user;
@@ -63,7 +62,7 @@ exports.postProfile = (req, res) => {
     return res.redirect('/user/profile');
   }
 
-  // Actualizar sesión
+  // actualizar sesion
   req.session.user.name     = name.trim();
   req.session.user.email    = email.trim().toLowerCase();
   req.session.user.initials = userModel.getInitials(name.trim());

@@ -13,7 +13,7 @@ const DEMO_USERS = [
   },
   {
     id: 2,
-    name: 'Tahis Canello', //Ana García
+    name: 'Tahis Canello',
     email: 'tv@kandex.com',
     password: bcrypt.hashSync('user123', 10),
     role: 'user',
@@ -23,7 +23,7 @@ const DEMO_USERS = [
   },
   {
     id: 3,
-    name: 'Daisy Toledo', //Luis Mendoza
+    name: 'Daisy Toledo',
     email: 'daisy@kandex.com',
     password: bcrypt.hashSync('user123', 10),
     role: 'user',
@@ -33,7 +33,7 @@ const DEMO_USERS = [
   },
   {
     id: 4,
-    name: 'Tahis Valdivia', //Sofía Ríos
+    name: 'Tahis Valdivia',
     email: 'tahis@kandex.com',
     password: bcrypt.hashSync('admin123', 10),
     role: 'admin',
@@ -43,7 +43,7 @@ const DEMO_USERS = [
   },
   {
     id: 5,
-    name: 'Marría Inostroza', //Juan Pérez
+    name: 'Marría Inostroza',
     email: 'marria@kandex.com',
     password: bcrypt.hashSync('user123', 10),
     role: 'user',
@@ -53,7 +53,7 @@ const DEMO_USERS = [
   },
   {
     id: 6,
-    name: 'Renata Amigo', //María López
+    name: 'Renata Amigo',
     email: 'renata@kandex.com',
     password: bcrypt.hashSync('user123', 10),
     role: 'user',
@@ -91,18 +91,18 @@ const DEMO_BOARDS = [
 ];
 
 const DEMO_TASKS = [
-  { id: 1, title: 'Diseñar wireframes',   description: 'Prototipos para pantallas principales de la app móvil.', status: 'Por realizar', priority: 'Alta',    board_id: 1 },
-  { id: 2, title: 'Configurar CI/CD',     description: 'Pipeline automático con GitHub Actions.',               status: 'Por realizar', priority: 'Media',   board_id: 1 },
-  { id: 3, title: 'API de autenticación', description: 'Login con JWT y refresh tokens seguros.',               status: 'En proceso',   priority: 'Urgente', board_id: 1 },
-  { id: 4, title: 'Módulo de reportes',   description: 'Gráficas de progreso semanal por equipo.',              status: 'En proceso',   priority: 'Media',   board_id: 1 },
-  { id: 5, title: 'Setup del proyecto',   description: 'Configurar Express, EJS y estructura MVC.',             status: 'Realizado',    priority: 'Baja',    board_id: 1 },
-  { id: 6, title: 'Schema MySQL',         description: 'Esquema de base de datos y migraciones.',               status: 'Realizado',    priority: 'Alta',    board_id: 1 },
-  { id: 7, title: 'Reorganizar Documentación', description: 'Estructurar y actualizar la documentación del proyecto.', status: 'En proceso', priority: 'Alta',   board_id: 2 },
-  { id: 8, title: 'Agregar Índice', description: 'Falta el índice.', status: 'En proceso',   priority: 'Media',    board_id: 2 },
-  { id: 9, title: 'Agregar puntos fuertes',     description: 'Agregar lo solicitado por el profe',        status: 'Realizado',    priority: 'Media',    board_id: 2 },
-  { id: 10, title: 'Integrar propuestas', description: 'Agregar al documento las propuestas hechas por nosotras',   status: 'Por realizar', priority: 'Baja',   board_id: 2 },
-  { id: 11, title: 'Fechas importantes',    description: 'Agregar fechas de captura',         status: 'Realizado',   priority: 'Baja',    board_id: 2 },
-  { id: 12, title: 'Formato APA 7',    description: 'FALTA EL FORMATO APA',                   status: 'Por realizar',    priority: 'Alta',   board_id: 2 },
+  { id: 1, usuario_id: [1, 4], titulo: 'Diseñar wireframes',   descripcion: 'Prototipos para pantallas principales de la app móvil.', estado: 'Por realizar', prioridad: 'Alta',    board_id: 1 },
+  { id: 2, usuario_id: [1, 4], titulo: 'Configurar CI/CD',     descripcion: 'Pipeline automático con GitHub Actions.',               estado: 'Por realizar', prioridad: 'Media',   board_id: 1 },
+  { id: 3, usuario_id: [1, 4], titulo: 'API de autenticación', descripcion: 'Login con JWT y refresh tokens seguros.',               estado: 'En proceso',   prioridad: 'Urgente', board_id: 1 },
+  { id: 4, usuario_id: [1, 4], titulo: 'Módulo de reportes',   descripcion: 'Gráficas de progreso semanal por equipo.',              estado: 'En proceso',   prioridad: 'Media',   board_id: 1 },
+  { id: 5, usuario_id: [1, 4], titulo: 'Setup del proyecto',   descripcion: 'Configurar Express, EJS y estructura MVC.',             estado: 'Realizado',    prioridad: 'Baja',    board_id: 1 },
+  { id: 6, usuario_id: [1, 4], titulo: 'Schema MySQL',         descripcion: 'Esquema de base de datos y migraciones.',               estado: 'Realizado',    prioridad: 'Alta',    board_id: 1 },
+  { id: 7, usuario_id: [2, 3, 6], titulo: 'Reorganizar Documentación', descripcion: 'Estructurar y actualizar la documentación del proyecto.', estado: 'En proceso', prioridad: 'Alta',   board_id: 2 },
+  { id: 8, usuario_id: [2, 3, 6], titulo: 'Agregar Índice', descripcion: 'Falta el índice.', estado: 'En proceso',   prioridad: 'Media',    board_id: 2 },
+  { id: 9, usuario_id: [2, 3, 6], titulo: 'Agregar puntos fuertes',     descripcion: 'Agregar lo solicitado por el profe',        estado: 'Realizado',    prioridad: 'Media',    board_id: 2 },
+  { id: 10, usuario_id: [2, 3, 6], titulo: 'Integrar propuestas', descripcion: 'Agregar al documento las propuestas hechas por nosotras',   estado: 'Por realizar', prioridad: 'Baja',   board_id: 2 },
+  { id: 11, usuario_id: [2, 3, 6], titulo: 'Fechas importantes',    descripcion: 'Agregar fechas de captura',         estado: 'Realizado',   prioridad: 'Baja',    board_id: 2 },
+  { id: 12, usuario_id: [2, 3, 6], titulo: 'Formato APA 7',    descripcion: 'FALTA EL FORMATO APA',                   estado: 'Por realizar',    prioridad: 'Alta',   board_id: 2 },
 ];
 
 const DEMO_STATS = {

@@ -1,7 +1,11 @@
+const { DEMO_USERS } = require('../config/demoData'); // editar despues
+
 function ensureAuthenticated(req, res, next) {
   if (req.session && req.session.user) {
+    req.user = req.session.user;
     return next();
   }
+
   req.flash('error_msg', 'Debes iniciar sesión para acceder a esta página.');
   res.redirect('/login');
 }
@@ -16,4 +20,4 @@ function ensureNotAuthenticated(req, res, next) {
   next();
 }
 
-module.exports = { ensureAuthenticated, ensureNotAuthenticated };
+module.exports = { ensureAuthenticated, ensureNotAuthenticated, };

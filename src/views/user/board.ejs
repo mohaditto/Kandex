@@ -14,7 +14,7 @@
           <%= boardName %> · <%= stats.total %> tareas activas
         </p>
       </div>
-      <button class="btn-u"><i class="bi bi-plus"></i>Nueva Tarea</button>
+      <a href="/tareas/create" class="btn-u"><i class="bi bi-plus"></i>Nueva Tarea</a>
     </div>
 
     <div class="row g-3">
@@ -27,17 +27,13 @@
           </div>
           <% kanban.porRealizar.forEach(task => { %>
             <div class="tcard" draggable="true" data-id="<%= task.id %>">
-              <h5><%= task.title %></h5>
-              <p><%= task.description %></p>
+              <h5><%= task.titulo %></h5>
+              <p><%= task.descripcion %></p>
               <div class="d-flex align-items-center justify-content-between">
-                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <span class="pbadge p<%= task.prioridad %>"><%= task.prioridad %></span>
                 <div class="d-flex gap-1">
-                  <button class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                  <button class="btn btn-sm btn-outline-danger">
-                    <i class="bi bi-trash"></i>
-                  </button>
+                  <a href="/tareas/edit/<%= task.id %>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                  <a href="/tareas/delete/<%= task.id %>" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
                 </div>
               </div>
             </div>
@@ -53,17 +49,13 @@
           </div>
           <% kanban.enProceso.forEach(task => { %>
             <div class="tcard" draggable="true" data-id="<%= task.id %>">
-              <h5><%= task.title %></h5>
-              <p><%= task.description %></p>
+              <h5><%= task.titulo %></h5>
+              <p><%= task.descripcion %></p>
               <div class="d-flex align-items-center justify-content-between">
-                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <span class="pbadge p<%= task.prioridad %>"><%= task.prioridad %></span>
                 <div class="d-flex gap-1">
-                  <button class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                  <button class="btn btn-sm btn-outline-danger">
-                    <i class="bi bi-trash"></i>
-                  </button>
+                  <a href="/tareas/edit/<%= task.id %>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                  <a href="/tareas/delete/<%= task.id %>" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
                 </div>
               </div>
             </div>
@@ -79,17 +71,13 @@
           </div>
           <% kanban.realizado.forEach(task => { %>
             <div class="tcard" draggable="true" data-id="<%= task.id %>">
-              <h5><%= task.title %></h5>
-              <p><%= task.description %></p>
+              <h5><%= task.titulo %></h5>
+              <p><%= task.descripcion %></p>
               <div class="d-flex align-items-center justify-content-between">
-                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <span class="pbadge p<%= task.prioridad %>"><%= task.prioridad %></span>
                 <div class="d-flex gap-1">
-                  <button class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                  <button class="btn btn-sm btn-outline-danger">
-                    <i class="bi bi-trash"></i>
-                  </button>
+                  <a href="/tareas/edit/<%= task.id %>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                  <a href="/tareas/delete/<%= task.id %>" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
                 </div>
               </div>
             </div>

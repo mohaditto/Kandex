@@ -62,10 +62,10 @@
           </div>
           <% previewTasks.porRealizar.forEach(task => { %>
             <div class="tcard">
-              <h5><%= task.title %></h5>
-              <p><%= task.description %></p>
+              <h5><%= task.titulo %></h5>
+              <p><%= task.descripcion %></p>
               <div class="d-flex align-items-center justify-content-between">
-                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <span class="pbadge p<%= task.prioridad %>"><%= task.prioridad %></span>
               </div>
             </div>
           <% }) %>
@@ -81,10 +81,10 @@
           </div>
           <% previewTasks.enProceso.forEach(task => { %>
             <div class="tcard">
-              <h5><%= task.title %></h5>
-              <p><%= task.description %></p>
+              <h5><%= task.titulo %></h5>
+              <p><%= task.descripcion %></p>
               <div class="d-flex align-items-center justify-content-between">
-                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <span class="pbadge p<%= task.prioridad %>"><%= task.prioridad %></span>
               </div>
             </div>
           <% }) %>
@@ -100,10 +100,10 @@
           </div>
           <% previewTasks.realizado.forEach(task => { %>
             <div class="tcard">
-              <h5><%= task.title %></h5>
-              <p><%= task.description %></p>
+              <h5><%= task.titulo %></h5>
+              <p><%= task.descripcion %></p>
               <div class="d-flex align-items-center justify-content-between">
-                <span class="pbadge p<%= task.priority %>"><%= task.priority %></span>
+                <span class="pbadge p<%= task.prioridad %>"><%= task.prioridad %></span>
               </div>
             </div>
           <% }) %>

@@ -1,8 +1,8 @@
-const Tarea = require('../models/tareaModel');
+const Task = require('../models/taskModel'); // cambiar despues al de db... y todo lo demas
 
 exports.getTareas = async (req, res) => {
     try {
-        const tareas = await Tarea.findByUser(req.user.id);
+        const tareas = await Task.findByUser(req.user.id);
         res.render('tareas/board', { tareas, user: req.user });
     } catch (err) {
         console.error(err);
@@ -17,7 +17,7 @@ exports.getCreate = (req, res) => {
 exports.postCreate = async (req, res) => {
     try {
         const { titulo, descripcion, prioridad, fecha_inicio, fecha_limite } = req.body;
-        await Tarea.create({
+        await Task.create({
             usuario_id: req.user.id,
             equipo_id: null,
             titulo,
@@ -36,18 +36,23 @@ exports.postCreate = async (req, res) => {
 
 exports.getEdit = async (req, res) => {
     try {
-        const tarea = await Tarea.findById(req.params.id);
-        res.render('tareas/edit', { tarea, user: req.user });
+        console.log('ID:', req.params.id);
+        const tarea = await Task.findById(req.params.id);
+        console.log('TAREA:', tarea);
+        res.render('tareas/edit', {
+            tarea,
+            user: req.user
+        });
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error al obtener tarea');
+        console.error('ERROR REAL:', err);
+        res.status(500).send(err.message);
     }
 };
 
 exports.postEdit = async (req, res) => {
     try {
         const { titulo, descripcion, estado, prioridad, fecha_inicio, fecha_limite } = req.body;
-        await Tarea.update(req.params.id, { titulo, descripcion, estado, prioridad, fecha_inicio, fecha_limite });
+        await Task.update(req.params.id, { titulo, descripcion, estado, prioridad, fecha_inicio, fecha_limite });
         res.redirect('/tareas');
     } catch (err) {
         console.error(err);
@@ -57,7 +62,7 @@ exports.postEdit = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        await Tarea.delete(req.params.id);
+        await Task.delete(req.params.id);
         res.redirect('/tareas');
     } catch (err) {
         console.error(err);
@@ -68,13 +73,13 @@ exports.delete = async (req, res) => {
 exports.updatePosition = async (req, res) => {
     try {
         const { id, posicion, estado } = req.body;
-        await Tarea.updatePosition(id, posicion, estado);
+        await Task.updatePosition(id, posicion, estado);
         if (estado === 'Realizado') {
-            await Tarea.update(id, { 
-                titulo: (await Tarea.findById(id)).titulo,
-                descripcion: (await Tarea.findById(id)).descripcion,
+            await Task.update(id, { 
+                titulo: (await Task.findById(id)).titulo,
+                descripcion: (await Task.findById(id)).descripcion,
                 estado: 'Realizado',
-                prioridad: (await Tarea.findById(id)).prioridad
+                prioridad: (await Task.findById(id)).prioridad
             });
         }
         res.json({ success: true });
