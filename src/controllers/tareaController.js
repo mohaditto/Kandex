@@ -1,31 +1,42 @@
 const Tarea = require('../models/tareaModel');
+const Equipo = require('../models/equipoModel');
+const { demoTareas, demoEquipos } = require('../config/demoData');
+
+const isDemo = (req) => req.session && req.session.demoMode;
 
 exports.getTareas = async (req, res) => {
+    if (isDemo(req)) return res.render('tareas/board', { tareas: demoTareas, user: req.user });
     try {
         const tareas = await Tarea.findByUser(req.user.id);
         res.render('tareas/board', { tareas, user: req.user });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error al obtener tareas');
+        res.render('tareas/board', { tareas: [], user: req.user });
     }
 };
 
-exports.getCreate = (req, res) => {
-    res.render('tareas/create', { user: req.user });
+exports.getCreate = async (req, res) => {
+    if (isDemo(req)) return res.render('tareas/create', { equipos: demoEquipos, user: req.user });
+    try {
+        const equipos = await Equipo.findAll();
+        res.render('tareas/create', { equipos, user: req.user });
+    } catch (err) {
+        res.render('tareas/create', { equipos: [], user: req.user });
+    }
 };
 
 exports.postCreate = async (req, res) => {
+    if (isDemo(req)) return res.redirect('/tareas');
     try {
-        const { titulo, descripcion, prioridad, fecha_inicio, fecha_limite } = req.body;
+        const { titulo, descripcion, estado, prioridad, equipo_id, fecha_inicio, fecha_limite } = req.body;
         await Tarea.create({
             usuario_id: req.user.id,
-            equipo_id: null,
-            titulo,
-            descripcion,
-            estado: 'Por realizar',
-            prioridad,
-            fecha_inicio,
-            fecha_limite
+            equipo_id: equipo_id || 1,
+            titulo, descripcion,
+            estado: estado || 'Por realizar',
+            prioridad: prioridad || 'Media',
+            fecha_inicio: fecha_inicio || null,
+            fecha_limite: fecha_limite || null,
         });
         res.redirect('/tareas');
     } catch (err) {
@@ -35,16 +46,22 @@ exports.postCreate = async (req, res) => {
 };
 
 exports.getEdit = async (req, res) => {
+    if (isDemo(req)) {
+        const tarea = demoTareas.find(t => t.id === parseInt(req.params.id)) || demoTareas[0];
+        return res.render('tareas/edit', { tarea, user: req.user });
+    }
     try {
         const tarea = await Tarea.findById(req.params.id);
+        if (!tarea) return res.redirect('/tareas');
         res.render('tareas/edit', { tarea, user: req.user });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error al obtener tarea');
+        res.redirect('/tareas');
     }
 };
 
 exports.postEdit = async (req, res) => {
+    if (isDemo(req)) return res.redirect('/tareas');
     try {
         const { titulo, descripcion, estado, prioridad, fecha_inicio, fecha_limite } = req.body;
         await Tarea.update(req.params.id, { titulo, descripcion, estado, prioridad, fecha_inicio, fecha_limite });
@@ -56,27 +73,21 @@ exports.postEdit = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
+    if (isDemo(req)) return res.redirect('/tareas');
     try {
         await Tarea.delete(req.params.id);
         res.redirect('/tareas');
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error al eliminar tarea');
+        res.redirect('/tareas');
     }
 };
 
 exports.updatePosition = async (req, res) => {
+    if (isDemo(req)) return res.json({ success: true });
     try {
         const { id, posicion, estado } = req.body;
         await Tarea.updatePosition(id, posicion, estado);
-        if (estado === 'Realizado') {
-            await Tarea.update(id, { 
-                titulo: (await Tarea.findById(id)).titulo,
-                descripcion: (await Tarea.findById(id)).descripcion,
-                estado: 'Realizado',
-                prioridad: (await Tarea.findById(id)).prioridad
-            });
-        }
         res.json({ success: true });
     } catch (err) {
         console.error(err);

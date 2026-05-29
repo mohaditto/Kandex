@@ -1,4 +1,4 @@
-// Drag & Drop para Kanban
+
 document.addEventListener('DOMContentLoaded', () => {
     const columns = document.querySelectorAll('.kanban-column');
     let draggedElement = null;

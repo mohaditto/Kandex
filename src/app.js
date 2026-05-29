@@ -1,69 +1,121 @@
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const passport = require('./config/passport');
-const ejs = require('ejs');
 const path = require('path');
+const ejs = require('ejs');
 
 const app = express();
 
-// Configuración de vistas
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+const VIEWS = path.join(__dirname, 'views');
 
-// Middlewares
+app.set('view engine', 'ejs');
+app.set('views', VIEWS);
+
+// Inject user into res.locals globally
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+});
+
+// Layout middleware — supports opts.layout override
+app.use((req, res, next) => {
+    res.render = function (view, locals, cb) {
+        if (typeof locals === 'function') { cb = locals; locals = {}; }
+        const opts = Object.assign({}, res.locals, locals || {});
+        const layoutName = ('layout' in opts) ? opts.layout : 'layouts/main';
+        const viewPath = path.join(VIEWS, view + '.ejs');
+
+        ejs.renderFile(viewPath, opts, (err, body) => {
+            if (err) return next(err);
+            if (!layoutName) {
+                return cb ? cb(null, body) : res.send(body);
+            }
+            const layoutPath = path.join(VIEWS, layoutName + '.ejs');
+            ejs.renderFile(layoutPath, Object.assign({}, opts, { body }), (err, html) => {
+                if (err) return next(err);
+                return cb ? cb(null, html) : res.send(html);
+            });
+        });
+    };
+    next();
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Sesiones
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'kandex_secret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
 }));
 
-// Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Rutas
-const authRoutes = require('./routes/authRoutes');
+// Keep res.locals.user in sync after passport populates req.user
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+});
+
+const authRoutes      = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
-const tareaRoutes = require('./routes/tareaRoutes');
-const equipoRoutes = require('./routes/equipoRoutes');
-const reporteRoutes = require('./routes/reporteRoutes');
-// Agregar más rutas aquí
+const tareaRoutes     = require('./routes/tareaRoutes');
+const equipoRoutes    = require('./routes/equipoRoutes');
+const reporteRoutes   = require('./routes/reporteRoutes');
 
-app.use('/auth', authRoutes);
+app.use('/auth',      authRoutes);
 app.use('/dashboard', dashboardRoutes);
-app.use('/tareas', tareaRoutes);
-app.use('/equipos', equipoRoutes);
-app.use('/reportes', reporteRoutes);
-// Agregar más rutas
+app.use('/tareas',    tareaRoutes);
+app.use('/equipos',   equipoRoutes);
+app.use('/reportes',  reporteRoutes);
 
-// Ruta raíz
 app.get('/', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.redirect('/dashboard');
-    } else {
-        res.redirect('/auth/login');
+    res.redirect(req.isAuthenticated() ? '/tareas' : '/auth/login');
+});
+
+// ── DEMO MODE ─────────────────────────────────────
+const { demoUser } = require('./config/demoData');
+
+app.use((req, res, next) => {
+    if (req.session && req.session.demoMode && !req.user) {
+        req.user = demoUser;
+        res.locals.user = demoUser;
     }
+    next();
 });
 
-// Ruta temporal para ver dashboard sin login
 app.get('/demo', (req, res) => {
-    const tareasEjemplo = [
-        { id: 1, titulo: 'Tarea de ejemplo 1', descripcion: 'Descripción 1', estado: 'Por realizar', prioridad: 'Media' },
-        { id: 2, titulo: 'Tarea de ejemplo 2', descripcion: 'Descripción 2', estado: 'En proceso', prioridad: 'Alta' },
-        { id: 3, titulo: 'Tarea de ejemplo 3', descripcion: 'Descripción 3', estado: 'Realizado', prioridad: 'Baja' }
-    ];
-    res.render('dashboard', { tareas: tareasEjemplo, user: { nombre_usuario: 'Demo' } });
+    req.session.demoMode = true;
+    res.redirect('/tareas');
 });
 
-// Manejo de errores
+app.get('/demo/exit', (req, res) => {
+    req.session.demoMode = false;
+    res.redirect('/auth/login');
+});
+
+// 404
+app.use((req, res) => {
+    res.status(404).send(`
+        <body style="font-family:monospace;padding:40px;background:#faf8f4;color:#1a1a1a">
+        <h2 style="color:#b07f2b">404 — Página no encontrada</h2>
+        <p>${req.method} ${req.path}</p>
+        <a href="/" style="color:#3a6e9c">← Volver al inicio</a>
+        </body>`);
+});
+
+// 500
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Something broke!');
+    res.status(500).send(`
+        <body style="font-family:monospace;padding:40px;background:#faf8f4;color:#1a1a1a">
+        <h2 style="color:#c25e58">500 — Error del servidor</h2>
+        <pre style="background:#f5d9d6;padding:16px;border-radius:8px;font-size:13px;overflow:auto">${err.message}\n\n${err.stack}</pre>
+        <a href="/" style="color:#3a6e9c">← Volver al inicio</a>
+        </body>`);
 });
 
 module.exports = app;
