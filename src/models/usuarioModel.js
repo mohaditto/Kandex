@@ -2,35 +2,8 @@ const db = require('../config/db');
 const bcrypt = require('bcryptjs');
 const { normalizeRole } = require('../middlewares/roleMiddleware');
 
-function roleVariants(role) {
-    const normalized = normalizeRole(role);
-    if (normalized === 'Administrador') return ['Administrador'];
-    if (normalized === 'Líder') return ['Líder'];
-    return ['Miembro'];
-}
-
-function isEnumMismatch(err) {
-    return ['ER_TRUNCATED_WRONG_VALUE_FOR_FIELD', 'WARN_DATA_TRUNCATED', 'ER_WARN_DATA_TRUNCATED'].includes(err.code)
-        || String(err.message || '').includes("Data truncated for column 'rol'");
-}
-
-async function queryWithRoleFallback(query, params, rolIndex) {
-    const variants = roleVariants(params[rolIndex]);
-    let lastError;
-
-    for (const variant of variants) {
-        const nextParams = [...params];
-        nextParams[rolIndex] = variant;
-        try {
-            return await db.promise().query(query, nextParams);
-        } catch (err) {
-            if (!isEnumMismatch(err)) throw err;
-            lastError = err;
-        }
-    }
-
-    throw lastError;
-}
+// Roles válidos en la BD
+const ROLES_VALIDOS = ['Administrador', 'Líder', 'Miembro'];
 
 function normalizeUser(row) {
     return row ? { ...row, rol: normalizeRole(row.rol) } : row;
@@ -38,11 +11,12 @@ function normalizeUser(row) {
 
 class Usuario {
     static async create({ nombre_usuario, email, password, rol }) {
+        // Validar que el rol sea válido
+        const rolFinal = ROLES_VALIDOS.includes(rol) ? rol : 'Miembro';
         const hashedPassword = await bcrypt.hash(password, 10);
-        const [result] = await queryWithRoleFallback(
+        const [result] = await db.promise().query(
             'INSERT INTO usuarios (nombre_usuario, email, password_hash, rol) VALUES (?, ?, ?, ?)',
-            [nombre_usuario, email, hashedPassword, rol],
-            3
+            [nombre_usuario, email, hashedPassword, rolFinal]
         );
         return result.insertId;
     }
@@ -71,10 +45,11 @@ class Usuario {
     }
 
     static async update(id, { nombre_usuario, email, rol }) {
-        await queryWithRoleFallback(
+        // Validar que el rol sea un valor válido del ENUM
+        const rolFinal = ROLES_VALIDOS.includes(rol) ? rol : 'Miembro';
+        await db.promise().query(
             'UPDATE usuarios SET nombre_usuario = ?, email = ?, rol = ? WHERE id = ?',
-            [nombre_usuario, email, rol, id],
-            2
+            [nombre_usuario, email, rolFinal, id]
         );
     }
 }

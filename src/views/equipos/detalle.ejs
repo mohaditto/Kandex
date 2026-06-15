@@ -1,24 +1,73 @@
-<h1 class="mb-4"><%= equipo.nombre_equipo %></h1>
-<p><%= equipo.descripcion %></p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0"><%= equipo.nombre_equipo %></h1>
+    <a href="/equipos" class="btn btn-secondary">Volver</a>
+</div>
 
-<h3 class="mt-4">Miembros del Equipo</h3>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Rol</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% usuarios.forEach(usuario => { %>
-            <tr>
-                <td><%= usuario.nombre_usuario %></td>
-                <td><%= usuario.email %></td>
-                <td><%= usuario.rol %></td>
-            </tr>
-        <% }); %>
-    </tbody>
-</table>
+<p class="text-muted"><%= equipo.descripcion %></p>
 
-<a href="/equipos" class="btn btn-secondary">Volver</a>
+<% 
+    const isAdmin = user.rol === 'Administrador';
+    const isLeader = user.rol === 'Líder';
+    const belongsToTeam = usuarios.some(u => u.id === user.id);
+    const canManage = isAdmin || (isLeader && belongsToTeam);
+%>
+
+<div class="row mt-5">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="h5 mb-0">Miembros del Equipo</h3>
+            </div>
+            <div class="card-body">
+                <% if (usuarios.length === 0) { %>
+                    <p class="text-muted mb-0">No hay miembros en este equipo.</p>
+                <% } else { %>
+                    <div class="list-group">
+                        <% usuarios.forEach(usuario => { %>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-bold"><%= usuario.nombre_usuario %></div>
+                                    <small class="text-muted"><%= usuario.email %></small><br>
+                                    <small class="badge bg-info"><%= usuario.rol %></small>
+                                </div>
+                                <% if (canManage && usuario.id !== user.id) { %>
+                                    <form action="/equipos/<%= equipo.id %>/usuarios/<%= usuario.id %>/delete" method="POST" class="mb-0">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Quitar</button>
+                                    </form>
+                                <% } %>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <% if (canManage) { %>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">Agregar Miembro</h3>
+                </div>
+                <div class="card-body">
+                    <% if (usuariosDisponibles.length === 0) { %>
+                        <p class="text-muted mb-0">No hay usuarios disponibles para agregar.</p>
+                    <% } else { %>
+                        <form action="/equipos/<%= equipo.id %>/usuarios" method="POST">
+                            <div class="mb-3">
+                                <label for="usuario_id" class="form-label">Seleccionar usuario</label>
+                                <select class="form-select" id="usuario_id" name="usuario_id" required>
+                                    <option value="">-- Seleccionar usuario --</option>
+                                    <% usuariosDisponibles.forEach(usuario => { %>
+                                        <option value="<%= usuario.id %>"><%= usuario.nombre_usuario %> (<%= usuario.rol %>)</option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </form>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
